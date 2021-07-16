@@ -4,18 +4,15 @@ def extract_identical(numbers):
     for _ind, _num in enumerate(numbers):
         if _num in coordinates.keys():
             identicals.append((coordinates[_num][-1], _ind))
-            print(_num)
-            print(identicals)
         coordinates[_num] = coordinates.get(_num, []) + [_ind]
-    print(identicals)
     return identicals
 
 
 def solve(a):
     identicals = extract_identical(a)
     subarray_amount = 0
-    for _ind, _num in enumerate(a):
-        pass
+    for _pair in identicals:
+        subarray_amount += 0
 
 
 
