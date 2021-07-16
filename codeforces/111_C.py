@@ -11,9 +11,12 @@ def extract_identical(numbers):
     return identicals
 
 
-
 def solve(a):
-    identical_numbers = extract_identical(a)
+    identicals = extract_identical(a)
+    subarray_amount = 0
+    for _ind, _num in enumerate(a):
+        pass
+
 
 
 t = int(input())
@@ -21,4 +24,4 @@ for _ in range(t):
     n = int(input())
     a = map(int, input().strip().split())
     answer = solve(a)
-    print(extract_identical(a))
+    print(answer)
