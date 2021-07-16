@@ -8,17 +8,28 @@ def extract_identical(numbers):
     return identicals
 
 
+def extract_segments(numbers):
+    return extract_identical(numbers)
+
+
 def solve(a):
-    identicals = extract_identical(a)
+    identicals = extract_segments(a) + [(len(a) - 1, len(a))]
     subarray_amount = 0
+    s_ind = 0
     for _pair in identicals:
-        subarray_amount += 0
-
-
+        if _pair[0] < s_ind:
+            continue
+        a = _pair[0]
+        b = _pair[1]
+        a0 = b - s_ind
+        n = a - s_ind + 1
+        subarray_amount += n * (2 * a0 - n + 1) // 2
+        s_ind = a + 1
+    return subarray_amount
 
 t = int(input())
 for _ in range(t):
     n = int(input())
-    a = map(int, input().strip().split())
+    a = list(map(int, input().strip().split()))
     answer = solve(a)
     print(answer)
