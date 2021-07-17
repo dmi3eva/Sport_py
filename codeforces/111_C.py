@@ -9,7 +9,24 @@ def extract_identical(numbers):
 
 
 def extract_segments(numbers):
-    return extract_identical(numbers)
+    segments = []
+    for first_ind, _number in enumerate(numbers):
+        end_ind = len(numbers)
+        second_ind = first_ind + 1
+        segment = None
+        while end_ind > second_ind:
+            third_ind = second_ind + 1
+            while third_ind < end_ind:
+                increasing = numbers[second_ind] >= numbers[first_ind] and numbers[third_ind] >= numbers[second_ind]
+                decreasing = numbers[second_ind] <= numbers[first_ind] and numbers[third_ind] <= numbers[second_ind]
+                if increasing or decreasing:
+                    segment = (first_ind, third_ind)
+                    end_ind = third_ind
+                third_ind += 1
+            second_ind += 1
+        if segment:
+            segments.append(segment)
+    return segments
 
 
 def solve(a):
