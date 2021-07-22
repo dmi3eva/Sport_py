@@ -34,10 +34,10 @@ def solve(n, l, r):
     answer += partly_solve(upper_bound + 1, n, l, r, 1)
     answer += partly_solve(lower_bound - 1, n, l, r, -1)
     if answer == 0:
-        pass
+         pass
         # pluses = min(n, r - k) - max(1, l - k) + 1
         # minuses = min(n, r + k) - max(1, l + k) + 1
-    return answer
+    return int(answer)
 
 
 
