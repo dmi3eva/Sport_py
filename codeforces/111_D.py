@@ -23,6 +23,16 @@ def partly_solve(k, n, l, r, step):
     return partly_answer
 
 
+def find_not_full_solution(n, l, r):
+    if l + 1 >= n:
+        return 0
+    minuses_starts_line = 1
+    minuses_ends_line = n - l
+    pluses_starts_line = max(1, l - n)
+    pluses_ends_line = max(1, r - 1)
+    if minuses_ends_line < pluses_starts_line:
+        return 0
+
 def solve(n, l, r):
     answer = 0
     half = n // 2
@@ -34,9 +44,7 @@ def solve(n, l, r):
     answer += partly_solve(upper_bound + 1, n, l, r, 1)
     answer += partly_solve(lower_bound - 1, n, l, r, -1)
     if answer == 0:
-         pass
-        # pluses = min(n, r - k) - max(1, l - k) + 1
-        # minuses = min(n, r + k) - max(1, l + k) + 1
+        answer = find_not_full_solution(n, l, r)
     return int(answer)
 
 
