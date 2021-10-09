@@ -1,5 +1,7 @@
-MOD = 1e9 + 7
+# Условие: https://codeforces.com/problemset/problem/1550/D
+# Разбор: https://codeforces.com/blog/entry/92864
 
+MOD = 1e9 + 7
 
 def C(m, n):
     if m < 0 or m > n:
@@ -90,7 +92,10 @@ def solve(n, l, r):
     lower_bound = max(1, n - r, l - 1)
     upper_bound = min(1 - l, r - n)
     if upper_bound >= lower_bound:
-        answer += (1 + upper_bound - lower_bound) * C(half, n)
+        if n % 2 == 0:
+            answer += (1 + upper_bound - lower_bound) * C(half, n)
+        else:
+            answer += (1 + upper_bound - lower_bound) * (C(half, n) + C(half + 1, n))
         answer %= MOD
     answer += partly_solve(upper_bound + 1, n, l, r, 1)
     answer += partly_solve(lower_bound - 1, n, l, r, -1)
