@@ -8,6 +8,7 @@ def count_steps(n, k):
         n -= n % k
     return steps_num
 
+
 req = int(input())
 for _ in range(req):
     n, k = map(int, input().strip().split())
