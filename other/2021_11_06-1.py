@@ -1,5 +1,6 @@
 from collections import deque
 def init(root, tree):
+    used = [0] * len(tree.keys())
     pref = [0]
     queue = deque()
     queue.append([root, 0, 0])
@@ -33,7 +34,11 @@ tree = {
         3: 20
     },
     2: {
+        1: 20,
         4: 30
+    },
+    3: {
+        1: 20
     }
 }
 
