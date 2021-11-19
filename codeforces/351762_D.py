@@ -1,14 +1,25 @@
-def get_disposal(n, towers):
-    towers.sort()
-    size = len(towers)
-    half = (size + 1) // 2
-    happy_disposal = [towers[half + i // 2] if i % 2 else towers[i // 2] for i in range(size)]
-    happy_disposal_str = list(map(str, happy_disposal))
-    return " ".join(happy_disposal_str)
+line = input()
 
+size = len(line)
 
-t = int(input())
-for _ in range(t):
-    n = int(input())
-    towers = list(map(int, input().strip().split()))
-    print(get_disposal(n, towers))
+pref_a = [0]
+pref_b = [0]
+
+for letter in line:
+    pref_a.append(pref_a[-1])
+    pref_b.append(pref_b[-1])
+    if letter == 'a':
+        pref_a[-1] += 1
+    else:
+        pref_b[-1] += 1
+
+answer = 0
+for i in range(size + 1):
+    for j in range(i, size + 1):
+        a_amount = pref_a[i] + (pref_a[-1] - pref_a[j])
+        b_amount = pref_b[j] - pref_b[i]
+        total = a_amount + b_amount
+        answer = max(total, answer)
+        if answer == size:
+            break
+print(answer)
