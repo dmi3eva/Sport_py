@@ -13,6 +13,7 @@ def generate(sequence, k, position):
         generate(sequence, k - 1, position + 1)
 
 
-n, k = [int(x) for x in input().strip().split(' ')]
-sequence = ['0' for _ in range(n)]
-generate(sequence, k, 0)
+if __name__ == "__main__":
+    n, k = [int(x) for x in input().strip().split(' ')]
+    sequence = ['0' for _ in range(n)]
+    generate(sequence, k, 0)
