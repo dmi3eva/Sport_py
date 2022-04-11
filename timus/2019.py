@@ -9,7 +9,7 @@ arc = input()
 stack = []
 hunters = {}  # Положение охотника на окружности: его порядковый номер
 ghosts = {}  # Положение привидения на окружности: его порядковый номер
-answers = [None] * n
+answers = [None] * (n + 1)
 
 
 
@@ -37,7 +37,7 @@ for ind, place in enumerate(arc):
 if len(stack) > 0:
     print("Impossible")
 else:
-    print(" ".join(stack))
+    print(" ".join(answers[1:]))
 
 
 """
