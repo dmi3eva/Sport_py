@@ -20,21 +20,33 @@ class Vertex:
         self.dist: Optional[int] = None
         self.time_in: Optional[int] = None
         self.time_out: Optional[int] = None
-        self.parents: Optional[List] = None
+        self.ancestors: Optional[List[int]] = []
         self.connections: List[Edge] = []
-        self.color = Color.WHITE
+        self.color: Color = Color.WHITE
+        self.parent: Optional[int] = None
 
 
-def dfs(graph: List[Vertex], current: Vertex, time: int, dist: int, parent: Optional[int]) -> int:
+def extract_parents(current: Vertex, parent: Vertex) -> List[int]:
+    ancestors = []
+    distance_log = 0
+    while parent and len(parent.ancestors) > distance_log:
+        ancestors.append(parent.ancestors[distance_log])
+        distance_log += 1
+        parent = parent.parent
+    return ancestors
+
+
+def dfs(graph: List[Vertex], current: Vertex, time: int, dist: int) -> int:
     current.time_in = time
     current.color = Color.GREY
     current.dist = dist
-    current.parents = None
     for son_edge in current.connections:
         son_vertex_id = son_edge.to
         son_vertex = graph[son_vertex_id]
+        son_vertex.parent = current
         if son_vertex.color is Color.WHITE:
-            time = dfs(graph, graph[son_vertex_id], time+1, dist+son_edge.weight, parents+[current.id])
+            son_vertex.ancestors = extract_parents(son_vertex, current)
+            time = dfs(graph, graph[son_vertex_id], time+1, dist+son_edge.weight)
     time += 1
     current.time_out = time
     current.color = Color.BLACK
@@ -50,5 +62,5 @@ for _ in range(n - 1):
     graph[v].connections.append(Edge(u, w))
 
 ROOT = graph[0]
-_ = dfs(graph, ROOT, 0, 0, [])
+_ = dfs(graph, ROOT, 0, 0)
 a = 7
