@@ -2,6 +2,8 @@ from typing import *
 from dataclasses import dataclass
 
 from queue import Queue
+
+
 @dataclass
 class City:
     ind: int
