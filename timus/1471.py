@@ -1,5 +1,6 @@
 from typing import *
 from enum import Enum
+from copy import deepcopy
 
 
 class Color(Enum):
@@ -26,8 +27,9 @@ class Vertex:
         self.parent: Optional[int] = None
 
 
-def extract_parents(current: Vertex, parent: Vertex) -> List[int]:
-    ancestors = []
+def extract_parents(current: Vertex) -> List[int]:
+    parent = current.parent
+    ancestors = [parent.id]
     distance_log = 0
     while parent and len(parent.ancestors) > distance_log:
         ancestors.append(parent.ancestors[distance_log])
@@ -43,9 +45,9 @@ def dfs(graph: List[Vertex], current: Vertex, time: int, dist: int) -> int:
     for son_edge in current.connections:
         son_vertex_id = son_edge.to
         son_vertex = graph[son_vertex_id]
-        son_vertex.parent = current
+        son_vertex.parent = deepcopy(current)
         if son_vertex.color is Color.WHITE:
-            son_vertex.ancestors = extract_parents(son_vertex, current)
+            son_vertex.ancestors = extract_parents(son_vertex)
             time = dfs(graph, graph[son_vertex_id], time+1, dist+son_edge.weight)
     time += 1
     current.time_out = time
