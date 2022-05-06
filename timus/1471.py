@@ -45,8 +45,8 @@ def dfs(graph: List[Vertex], current: Vertex, time: int, dist: int) -> int:
     for son_edge in current.connections:
         son_vertex_id = son_edge.to
         son_vertex = graph[son_vertex_id]
-        son_vertex.parent = deepcopy(current)
         if son_vertex.color is Color.WHITE:
+            son_vertex.parent = deepcopy(current)
             son_vertex.ancestors = extract_parents(son_vertex)
             time = dfs(graph, graph[son_vertex_id], time+1, dist+son_edge.weight)
     time += 1
