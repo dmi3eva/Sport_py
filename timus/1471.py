@@ -55,14 +55,38 @@ def dfs(graph: List[Vertex], current: Vertex, time: int, dist: int) -> int:
     return time
 
 
+def is_v1_ancestor_for_v2(vertex_1: Vertex, vertex_2: Vertex) -> bool:
+    time_in_condition = vertex_1.time_in < vertex_2.time_in
+    time_out_condition = vertex_1.time_out > vertex_2.time_out
+    return time_in_condition and time_out_condition
+
+
+def get_lca(graph: List[Vertex], from_vertex: Vertex, to_vertex: Vertex) -> Vertex:
+    if is_v1_ancestor_for_v2(from_vertex, to_vertex):
+        return from_vertex
+    if is_v1_ancestor_for_v2(to_vertex, from_vertex):
+        return to_vertex
+
+
+def get_min_distance(graph: List[Vertex], from_vertex: Vertex, to_vertex: Vertex) -> int:
+    lca = get_lca(graph, from_vertex, to_vertex)
+    distance = from_vertex.dist + to_vertex.dist - lca.dist
+    return distance
+
+
 n = int(input())
 graph = [Vertex(i) for i in range(n)]
 
-for _ in range(n - 1):
-    u, v, w = map(int, input().split())
+for _ in range(n):
+    u, v, w = map(int, input().strip().split())
     graph[u].connections.append(Edge(v, w))
     graph[v].connections.append(Edge(u, w))
 
+m = int(input())
+
 ROOT = graph[0]
 _ = dfs(graph, ROOT, 0, 0)
+for _ in range(m):
+    from_vertex, to_vertex = map(int, input().strip().split())
+    min_distance = get_min_distance(graph, from_vertex, to_vertex)
 a = 7
