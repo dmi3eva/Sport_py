@@ -66,6 +66,13 @@ def get_lca(graph: List[Vertex], from_vertex: Vertex, to_vertex: Vertex) -> Vert
         return from_vertex
     if is_v1_ancestor_for_v2(to_vertex, from_vertex):
         return to_vertex
+    current_vertex = from_vertex
+    pointer = len(current_vertex) - 1
+    candidate_vertex = graph[current_vertex.ancestors[pointer]]
+    while pointer >= 0:
+        if not is_v1_ancestor_for_v2(candidate_vertex, to_vertex):
+            current_vertex = graph[current_vertex.ancestors[pointer]]
+        pointer -= 1
 
 
 def get_min_distance(graph: List[Vertex], from_vertex: Vertex, to_vertex: Vertex) -> int:
