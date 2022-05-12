@@ -67,24 +67,27 @@ def get_lca(graph: List[Vertex], from_vertex: Vertex, to_vertex: Vertex) -> Vert
     if is_v1_ancestor_for_v2(to_vertex, from_vertex):
         return to_vertex
     current_vertex = from_vertex
-    pointer = len(current_vertex) - 1
-    candidate_vertex = graph[current_vertex.ancestors[pointer]]
+    pointer = len(current_vertex.ancestors) - 1
     while pointer >= 0:
+        candidate_vertex = graph[current_vertex.ancestors[pointer]]
         if not is_v1_ancestor_for_v2(candidate_vertex, to_vertex):
             current_vertex = graph[current_vertex.ancestors[pointer]]
         pointer -= 1
+    return candidate_vertex
 
 
-def get_min_distance(graph: List[Vertex], from_vertex: Vertex, to_vertex: Vertex) -> int:
+def get_min_distance(graph: List[Vertex], from_vertex_ind: int, to_vertex_ind: int) -> int:
+    from_vertex = graph[from_vertex_ind]
+    to_vertex = graph[to_vertex_ind]
     lca = get_lca(graph, from_vertex, to_vertex)
-    distance = from_vertex.dist + to_vertex.dist - lca.dist
+    distance = from_vertex.dist + to_vertex.dist - 2 * lca.dist
     return distance
 
 
 n = int(input())
 graph = [Vertex(i) for i in range(n)]
 
-for _ in range(n):
+for _ in range(n - 1):
     u, v, w = map(int, input().strip().split())
     graph[u].connections.append(Edge(v, w))
     graph[v].connections.append(Edge(u, w))
@@ -94,6 +97,6 @@ m = int(input())
 ROOT = graph[0]
 _ = dfs(graph, ROOT, 0, 0)
 for _ in range(m):
-    from_vertex, to_vertex = map(int, input().strip().split())
-    min_distance = get_min_distance(graph, from_vertex, to_vertex)
-a = 7
+    from_ind, to_ind = map(int, input().strip().split())
+    min_distance = get_min_distance(graph, from_ind, to_ind)
+    print(min_distance)
