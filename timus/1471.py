@@ -2,6 +2,9 @@ from typing import *
 from enum import Enum
 from copy import deepcopy
 
+import sys
+sys.setrecursionlimit(20000)
+
 
 class Color(Enum):
     WHITE = 0
@@ -69,9 +72,10 @@ def get_lca(graph: List[Vertex], from_vertex: Vertex, to_vertex: Vertex) -> Vert
     current_vertex = from_vertex
     pointer = len(current_vertex.ancestors) - 1
     while pointer >= 0:
-        candidate_vertex = graph[current_vertex.ancestors[pointer]]
+        candidate_ind = current_vertex.ancestors[pointer]
+        candidate_vertex = graph[candidate_ind]
         if not is_v1_ancestor_for_v2(candidate_vertex, to_vertex):
-            current_vertex = graph[current_vertex.ancestors[pointer]]
+            current_vertex = candidate_vertex
         pointer -= 1
     return candidate_vertex
 
