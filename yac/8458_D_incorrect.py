@@ -7,9 +7,6 @@ def generate_new_iteration(previous):
             new_iteration.add(f"(){rbs}")
         if f"{rbs}()" not in new_iteration:
             new_iteration.add(f"{rbs}()")
-    if "" in new_iteration:
-        new_iteration = new_iteration.remove("")
-    print(len(new_iteration))
     return list(new_iteration)
 
 
