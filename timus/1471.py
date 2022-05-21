@@ -76,7 +76,8 @@ def get_lca(graph: List[Vertex], from_vertex: Vertex, to_vertex: Vertex) -> Vert
         candidate_vertex = graph[candidate_ind]
         if not is_v1_ancestor_for_v2(candidate_vertex, to_vertex):
             current_vertex = candidate_vertex
-        pointer -= 1
+        else:
+            pointer -= 1
     return candidate_vertex
 
 
@@ -96,11 +97,13 @@ for _ in range(n - 1):
     graph[u].connections.append(Edge(v, w))
     graph[v].connections.append(Edge(u, w))
 
-m = int(input())
 
-ROOT = graph[0]
-_ = dfs(graph, ROOT, 0, 0)
-for _ in range(m):
-    from_ind, to_ind = map(int, input().strip().split())
-    min_distance = get_min_distance(graph, from_ind, to_ind)
-    print(min_distance)
+if __name__ == "__main__":
+    m = int(input())
+
+    ROOT = graph[0]
+    _ = dfs(graph, ROOT, 0, 0)
+    for _ in range(m):
+        from_ind, to_ind = map(int, input().strip().split())
+        min_distance = get_min_distance(graph, from_ind, to_ind)
+        print(min_distance)
