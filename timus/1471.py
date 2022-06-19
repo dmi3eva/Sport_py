@@ -35,9 +35,10 @@ def extract_parents(current: Vertex) -> List[int]:
     ancestors = [parent.id]
     distance_log = 0
     while parent and len(parent.ancestors) > distance_log:
-        ancestors.append(parent.ancestors[distance_log])
+        parent_ind = parent.ancestors[distance_log]
+        ancestors.append(parent_ind)
+        parent = graph[parent_ind]
         distance_log += 1
-        parent = parent.parent
     return ancestors
 
 
