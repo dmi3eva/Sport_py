@@ -90,16 +90,15 @@ def get_min_distance(graph: List[Vertex], from_vertex_ind: int, to_vertex_ind: i
     return distance
 
 
-n = int(input())
-graph = [Vertex(i) for i in range(n)]
-
-for _ in range(n - 1):
-    u, v, w = map(int, input().strip().split())
-    graph[u].connections.append(Edge(v, w))
-    graph[v].connections.append(Edge(u, w))
-
-
 if __name__ == "__main__":
+    n = int(input())
+    graph = [Vertex(i) for i in range(n)]
+
+    for _ in range(n - 1):
+        u, v, w = map(int, input().strip().split())
+        graph[u].connections.append(Edge(v, w))
+        graph[v].connections.append(Edge(u, w))
+
     m = int(input())
 
     ROOT = graph[0]
