@@ -3,7 +3,7 @@ from enum import Enum
 from copy import deepcopy
 
 import sys
-sys.setrecursionlimit(20000)
+sys.setrecursionlimit(70000)
 
 
 class Color(Enum):
