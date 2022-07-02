@@ -65,22 +65,21 @@ def dfs_without_recursion(graph: List[Vertex], root: Vertex) -> NoReturn:
     stack.append(root)
     time = -1
     while len(stack) > 0:
-        time += 1
         current = stack[-1]
+        if current.color is Color.WHITE:
+            current.color = Color.GREY
+            time += 1
+            current.time_in = time
+
         children = [graph[_s.to] for _s in current.connections]
         children = list(filter(lambda x: x.color is Color.WHITE, children))
+        for son in children:
+            stack.append(son)
         if len(children) == 0:
-            if current.color is Color.WHITE:
-                current.time_in = time
-                time += 1
+            time += 1
             current.time_out = time
             current.color = Color.BLACK
             stack.pop()
-            continue
-        current.color = Color.GREY
-        current.time_in = time
-        for son in children:
-            stack.append(son)
 
 
     # dist, time_in, time_out, parent, ancestors
