@@ -60,8 +60,10 @@ def dfs(graph: List[Vertex], current: Vertex, time: int, dist: int) -> int:
     return time
 
 
-def dfs_without_recursion(graph: List[Vertex], root: Vertex) -> NoReturn:
+def dfs_without_recursion(graph: List[Vertex], root: Vertex) -> List[Vertex]:
     stack = deque()
+    root.dist = 0
+    root.ancestors = []
     stack.append(root)
     time = -1
     while len(stack) > 0:
@@ -72,33 +74,21 @@ def dfs_without_recursion(graph: List[Vertex], root: Vertex) -> NoReturn:
             current.time_in = time
 
         children = [graph[_s.to] for _s in current.connections]
+        weights = {_s.to: _s.weight for _s in current.connections}
         children = list(filter(lambda x: x.color is Color.WHITE, children))
         for son in children:
             stack.append(son)
+            son.parent = current
+            son.dist = current.dist + weights[son.id]
+            son.ancestors = extract_parents(son)
+
         if len(children) == 0:
             time += 1
             current.time_out = time
             current.color = Color.BLACK
             stack.pop()
+    return graph
 
-
-    # dist, time_in, time_out, parent, ancestors
-
-
-    # current.time_in = time
-    # current.color = Color.GREY
-    # current.dist = dist
-    # for son_edge in current.connections:
-    #     son_vertex_id = son_edge.to
-    #     son_vertex = graph[son_vertex_id]
-    #     if son_vertex.color is Color.WHITE:
-    #         son_vertex.parent = deepcopy(current)
-    #         son_vertex.ancestors = extract_parents(son_vertex)
-    #         time = dfs(graph, graph[son_vertex_id], time+1, dist+son_edge.weight)
-    # time += 1
-    # current.time_out = time
-    # current.color = Color.BLACK
-    # return time
 
 def is_v1_ancestor_for_v2(vertex_1: Vertex, vertex_2: Vertex) -> bool:
     time_in_condition = vertex_1.time_in < vertex_2.time_in
@@ -107,6 +97,8 @@ def is_v1_ancestor_for_v2(vertex_1: Vertex, vertex_2: Vertex) -> bool:
 
 
 def get_lca(graph: List[Vertex], from_vertex: Vertex, to_vertex: Vertex) -> Vertex:
+    if from_vertex.id == to_vertex.id:
+        return from_vertex
     if is_v1_ancestor_for_v2(from_vertex, to_vertex):
         return from_vertex
     if is_v1_ancestor_for_v2(to_vertex, from_vertex):
@@ -131,9 +123,6 @@ def get_min_distance(graph: List[Vertex], from_vertex_ind: int, to_vertex_ind: i
     return distance
 
 
-
-
-
 if __name__ == "__main__":
     n = int(input())
     graph = [Vertex(i) for i in range(n)]
@@ -143,13 +132,13 @@ if __name__ == "__main__":
         graph[u].connections.append(Edge(v, w))
         graph[v].connections.append(Edge(u, w))
 
-    # m = int(input())
+    m = int(input())
 
     ROOT = graph[0]
-    dfs_without_recursion(graph, ROOT)
+    graph = dfs_without_recursion(graph, ROOT)
 
     debug = None
-    # for _ in range(m):
-    #     from_ind, to_ind = map(int, input().strip().split())
-    #     min_distance = get_min_distance(graph, from_ind, to_ind)
-    #     print(min_distance)
+    for _ in range(m):
+        from_ind, to_ind = map(int, input().strip().split())
+        min_distance = get_min_distance(graph, from_ind, to_ind)
+        print(min_distance)
