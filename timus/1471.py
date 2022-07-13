@@ -66,6 +66,8 @@ def is_v1_ancestor_for_v2(vertex_1: Vertex, vertex_2: Vertex) -> bool:
 
 
 def get_lca(graph: List[Vertex], from_vertex: Vertex, to_vertex: Vertex) -> Vertex:
+    if from_vertex.id == to_vertex.id:
+        return from_vertex
     if is_v1_ancestor_for_v2(from_vertex, to_vertex):
         return from_vertex
     if is_v1_ancestor_for_v2(to_vertex, from_vertex):
