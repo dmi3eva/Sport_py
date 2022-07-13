@@ -1,8 +1,6 @@
 from typing import *
 
 
-
-
 def quick_sort(numbers: List[int]) -> List[int]:
     if len(numbers) <= 1:
         return numbers
@@ -12,7 +10,8 @@ def quick_sort(numbers: List[int]) -> List[int]:
     greater = [_n for _n in numbers if _n > pivot_value]
     less = quick_sort(less)
     greater = quick_sort(greater)
-    return less + [pivot_value] + greater
+    equal_amount = len(numbers) - len(less) - len(greater)
+    return less + [pivot_value] * equal_amount + greater
 
 
 if __name__ == "__main__":
