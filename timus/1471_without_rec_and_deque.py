@@ -1,7 +1,6 @@
 from typing import *
 from enum import Enum
 from copy import deepcopy
-from collections import deque
 
 
 class Color(Enum):
@@ -58,7 +57,7 @@ def dfs(graph: List[Vertex], current: Vertex, time: int, dist: int) -> int:
 
 
 def dfs_without_recursion(graph: List[Vertex], root: Vertex) -> List[Vertex]:
-    stack = deque()
+    stack = []
     root.dist = 0
     root.ancestors = []
     stack.append(root)
