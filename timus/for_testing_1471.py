@@ -1,6 +1,6 @@
 from typing import *
 from enum import Enum
-from copy import deepcopy
+import sys
 
 
 class Color(Enum):
@@ -120,24 +120,27 @@ def get_min_distance(graph: List[Vertex], from_vertex_ind: int, to_vertex_ind: i
     distance = from_vertex.dist + to_vertex.dist - 2 * lca.dist
     return distance
 
-
 def solve():
-    n = int(input())
+    n = int(sys.stdin.readline())
     graph = [Vertex(i) for i in range(n)]
-
-    for _ in range(n - 1):
-        u, v, w = map(int, input().strip().split())
+    for i in range(n - 1):
+        line = sys.stdin.readline()
+        u, v, w = map(int, line.split())
         graph[u].connections.append(Edge(v, w))
         graph[v].connections.append(Edge(u, w))
 
-    m = int(input())
+    m = int(sys.stdin.readline())
+    ranges = [None for _ in range(m)]
+    for i in range(m):
+        ranges[i] = sys.stdin.readline()
+
 
     ROOT = graph[0]
     graph = dfs_without_recursion(graph, ROOT)
 
-    for _ in range(m):
-        from_ind, to_ind = map(int, input().strip().split())
-        min_distance = get_min_distance(graph, from_ind, to_ind)
+    for range_to_find in ranges:
+        s, f = map(int, range_to_find.split())
+        min_distance = get_min_distance(graph, s, f)
         print(min_distance)
 
 
