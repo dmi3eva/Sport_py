@@ -97,20 +97,17 @@ def get_lca(graph: List[Vertex], from_vertex: Vertex, to_vertex: Vertex) -> Vert
         return from_vertex
     if is_v1_ancestor_for_v2(to_vertex, from_vertex):
         return to_vertex
-    current_vertex = from_vertex
-    pointer = len(current_vertex.ancestors) - 1
+    current_vertex_id = from_vertex.id
+    pointer = len(graph[current_vertex_id].ancestors) - 1
+    candidate_id = current_vertex_id
     while pointer >= 0:
-        try:
-            candidate_ind = current_vertex.ancestors[pointer]
-            candidate_vertex = graph[candidate_ind]
-            if is_v1_ancestor_for_v2(candidate_vertex, to_vertex):
-                pointer -= 1
-            else:
-                current_vertex = candidate_vertex  # ToDo: иногда нужен сдвиг
-                pointer = len(candidate_vertex.ancestors) - 1
-        except:
-            debug = None
-    return candidate_vertex
+        candidate_id = graph[current_vertex_id].ancestors[pointer]
+        if is_v1_ancestor_for_v2(graph[candidate_id], to_vertex):
+            pointer -= 1
+        else:
+            current_vertex_id = candidate_id  # ToDo: иногда нужен сдвиг
+            pointer = len(graph[candidate_id].ancestors) - 1
+    return graph[candidate_id]
 
 
 def get_min_distance(graph: List[Vertex], from_vertex_ind: int, to_vertex_ind: int) -> int:
@@ -119,6 +116,7 @@ def get_min_distance(graph: List[Vertex], from_vertex_ind: int, to_vertex_ind: i
     lca = get_lca(graph, from_vertex, to_vertex)
     distance = from_vertex.dist + to_vertex.dist - 2 * lca.dist
     return distance
+
 
 def solve():
     n = int(sys.stdin.readline())
