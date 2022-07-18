@@ -39,29 +39,29 @@ def extract_parents(graph: List[Vertex], current: Vertex) -> List[int]:
 
 
 def dfs_without_recursion(graph: List[Vertex], root: Vertex) -> List[Vertex]:
+    stack: List[int]
     stack = []
     root.dist = 0
     root.ancestors = []
-    stack.append(root)
+    stack.append(root.id)
     time = -1
     while len(stack) > 0:
         current = stack[-1]
-        if current.color is Color.WHITE:
-            current.color = Color.GREY
+        if graph[current].color is Color.WHITE:
+            graph[current].color = Color.GREY
             time += 1
-            current.time_in = time
-        children = [graph[_s.to] for _s in current.connections]
-        weights = {_s.to: _s.weight for _s in current.connections}
-        children = list(filter(lambda x: x.color is Color.WHITE, children))
+            graph[current].time_in = time
+        children = [(_s.to, _s.weight) for _s in graph[current].connections]
+        children = list(filter(lambda x: graph[x[0]].color is Color.WHITE, children))
         for son in children:
-            stack.append(son)
-            son.parent = current.id
-            son.dist = current.dist + weights[son.id]
-            son.ancestors = extract_parents(graph, son)
+            stack.append(son[0])
+            graph[son[0]].parent = graph[current].id
+            graph[son[0]].dist = graph[current].dist + son[1]
+            graph[son[0]].ancestors = extract_parents(graph, graph[son[0]])
         if len(children) == 0:
             time += 1
-            current.time_out = time
-            current.color = Color.BLACK
+            graph[current].time_out = time
+            graph[current].color = Color.BLACK
             stack.pop()
     return graph
 
@@ -79,11 +79,16 @@ def get_lca(graph: List[Vertex], from_vertex: Vertex, to_vertex: Vertex) -> Vert
         return from_vertex
     if is_v1_ancestor_for_v2(to_vertex, from_vertex):
         return to_vertex
-    current_vertex_id = from_vertex.id
+    if len(from_vertex.ancestors) < len(to_vertex.ancestors):
+        current_vertex_id = from_vertex.id
+        finish_id = to_vertex.id
+    else:
+        current_vertex_id = to_vertex.id
+        finish_id = from_vertex.id
     pointer = len(graph[current_vertex_id].ancestors) - 1
     while pointer >= 0:
         candidate_id = graph[current_vertex_id].ancestors[pointer]
-        if is_v1_ancestor_for_v2(graph[candidate_id], to_vertex):
+        if is_v1_ancestor_for_v2(graph[candidate_id], graph[finish_id]):
             pointer -= 1
         else:
             current_vertex_id = candidate_id
