@@ -28,32 +28,14 @@ class Vertex:
 
 
 def extract_parents(graph: List[Vertex], current: Vertex) -> List[int]:
-    parent = graph[current.parent]
-    ancestors = [parent.id]
+    parent_ind = graph[current.parent].id
+    ancestors = [parent_ind]
     distance_log = 0
-    while parent and len(parent.ancestors) > distance_log:
-        parent_ind = parent.ancestors[distance_log]
+    while graph[parent_ind] and len(graph[parent_ind].ancestors) > distance_log:
+        parent_ind = graph[parent_ind].ancestors[distance_log]
         ancestors.append(parent_ind)
-        parent = graph[parent_ind]
         distance_log += 1
     return ancestors
-
-
-def dfs(graph: List[Vertex], current: Vertex, time: int, dist: int) -> int:
-    current.time_in = time
-    current.color = Color.GREY
-    current.dist = dist
-    for son_edge in current.connections:
-        son_vertex_id = son_edge.to
-        son_vertex = graph[son_vertex_id]
-        if son_vertex.color is Color.WHITE:
-            son_vertex.parent = current.id
-            son_vertex.ancestors = extract_parents(graph, son_vertex)
-            time = dfs(graph, graph[son_vertex_id], time+1, dist+son_edge.weight)
-    time += 1
-    current.time_out = time
-    current.color = Color.BLACK
-    return time
 
 
 def dfs_without_recursion(graph: List[Vertex], root: Vertex) -> List[Vertex]:
@@ -99,13 +81,12 @@ def get_lca(graph: List[Vertex], from_vertex: Vertex, to_vertex: Vertex) -> Vert
         return to_vertex
     current_vertex_id = from_vertex.id
     pointer = len(graph[current_vertex_id].ancestors) - 1
-    candidate_id = current_vertex_id
     while pointer >= 0:
         candidate_id = graph[current_vertex_id].ancestors[pointer]
         if is_v1_ancestor_for_v2(graph[candidate_id], to_vertex):
             pointer -= 1
         else:
-            current_vertex_id = candidate_id  # ToDo: иногда нужен сдвиг
+            current_vertex_id = candidate_id
             pointer = len(graph[candidate_id].ancestors) - 1
     return graph[candidate_id]
 
